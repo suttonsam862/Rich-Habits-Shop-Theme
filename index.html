@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RICH HABITS | Train Like A Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Global Style Vars for Editability -->
+    <style>
+      :root {
+        --brand-black: #050505;
+        --brand-charcoal: #121212;
+        --brand-red: #D00000; /* Default Accent */
+        --text-white: #FFFFFF;
+      }
+    </style>
+
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                black: 'var(--brand-black)',
+                charcoal: 'var(--brand-charcoal)',
+                red: 'var(--brand-red)', 
+                glass: 'rgba(18, 18, 18, 0.7)',
+              }
+            },
+            fontFamily: {
+              display: ['Anton', 'sans-serif'],
+              sans: ['Inter', 'sans-serif'],
+            },
+            backgroundImage: {
+              'spotlight': 'radial-gradient(circle at center, rgba(50,50,50,0.4) 0%, var(--brand-black) 70%)',
+              'red-glow': 'radial-gradient(circle at center, rgba(208,0,0,0.15) 0%, transparent 70%)',
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Custom Scrollbar for that "Pro" feel */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--brand-black); 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--brand-red); 
+      }
+      
+      /* Utility to hide scrollbar but keep functionality */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "jszip": "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm"
+  }
+}
+</script>
+</head>
+  <body class="bg-brand-black text-white antialiased selection:bg-brand-red selection:text-white">
+    <div id="root"></div>
+  </body>
+</html>
