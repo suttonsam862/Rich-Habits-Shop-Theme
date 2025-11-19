@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-video",
+      "settings": {
+        "badge_text": "New Season Gear Dropped",
+        "heading": "Train Like\nA Pro",
+        "animation": "animate-fade-up"
+      }
+    },
+    "carousel": {
+      "type": "product-carousel",
+      "settings": {
+        "limit": 8
+      }
+    },
+    "teams": {
+      "type": "team-grid",
+      "settings": {
+        "heading": "Team Portals"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "carousel",
+    "teams"
+  ]
+}

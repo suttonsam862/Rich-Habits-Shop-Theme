@@ -1,0 +1,93 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Rich Habits Pro",
+    "theme_author": "Rich Habits Dev",
+    "theme_version": "4.0.0",
+    "theme_documentation_url": "https://rich-habits.com/docs"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Background Base",
+        "default": "#050505"
+      },
+      {
+        "type": "color",
+        "id": "card_bg_color",
+        "label": "Card/Secondary Background",
+        "default": "#121212"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Primary Text",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent Color (Brand Red)",
+        "default": "#D00000"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "Border Color",
+        "default": "rgba(255,255,255,0.1)"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "heading_font",
+        "label": "Heading Font",
+        "default": "anton_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "body_font",
+        "label": "Body Font",
+        "default": "inter_n4"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter"
+      }
+    ]
+  },
+  {
+    "name": "API Keys",
+    "settings": [
+      {
+        "type": "text",
+        "id": "gemini_api_key",
+        "label": "Google Gemini API Key",
+        "info": "Required for AI Coach and Gear Lab functionality."
+      }
+    ]
+  }
+]
