@@ -1,0 +1,221 @@
+{% comment %}
+  Custom Gear Section
+  Two-column section for custom services
+{% endcomment %}
+
+<section class="bg-brand-charcoal min-h-screen flex flex-col lg:flex-row">
+  
+  <div class="lg:w-1/2 relative min-h-[50vh] lg:min-h-auto overflow-hidden">
+    {% if section.settings.image != blank %}
+      <img 
+        src="{{ section.settings.image | image_url: width: 2000 }}" 
+        alt="{{ section.settings.heading | escape }}" 
+        loading="lazy"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+    {% else %}
+      <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-900"></div>
+    {% endif %}
+    <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent lg:bg-gradient-to-t lg:from-transparent lg:to-black/50"></div>
+    
+    {% if section.settings.overlay_text != blank %}
+      <div class="absolute bottom-12 left-12 z-10 hidden lg:block">
+        <h3 class="font-display text-8xl text-white/10 uppercase leading-none">
+          {{ section.settings.overlay_text | newline_to_br }}
+        </h3>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="lg:w-1/2 p-12 lg:p-24 flex flex-col justify-center bg-brand-charcoal relative border-l border-white/5">
+    {% if section.settings.eyebrow != blank %}
+      <span class="text-brand-red font-bold tracking-widest text-sm uppercase mb-4 block">
+        {{ section.settings.eyebrow }}
+      </span>
+    {% endif %}
+    
+    {% if section.settings.heading != blank %}
+      <h2 class="font-display text-5xl md:text-7xl uppercase text-white mb-8">
+        {{ section.settings.heading | newline_to_br }}
+      </h2>
+    {% endif %}
+    
+    {% if section.settings.description != blank %}
+      <div class="text-neutral-400 text-lg mb-12 max-w-md leading-relaxed">
+        {{ section.settings.description }}
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="grid gap-8 mb-12">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'feature' %}
+              <div class="flex gap-6 items-start group" {{ block.shopify_attributes }}>
+                <div class="p-4 bg-black border border-white/10 rounded-sm group-hover:border-brand-red transition-colors shrink-0">
+                  {% if block.settings.icon == 'pen' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                      <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path>
+                      <path d="m15 5 4 4"></path>
+                    </svg>
+                  {% elsif block.settings.icon == 'package' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                      <path d="m7.5 4.27 9 5.15"></path>
+                      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+                      <path d="m3.3 7 8.7 5 8.7-5"></path>
+                      <path d="M12 22V12"></path>
+                    </svg>
+                  {% elsif block.settings.icon == 'trophy' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                      <path d="M4 22h16"></path>
+                      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                    </svg>
+                  {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                      <path d="M20 6 9 17l-5-5"></path>
+                    </svg>
+                  {% endif %}
+                </div>
+                <div>
+                  {% if block.settings.title != blank %}
+                    <h4 class="font-bold text-white uppercase tracking-wide mb-2">
+                      {{ block.settings.title }}
+                    </h4>
+                  {% endif %}
+                  {% if block.settings.description != blank %}
+                    <p class="text-neutral-500 text-sm">
+                      {{ block.settings.description }}
+                    </p>
+                  {% endif %}
+                </div>
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+      <a 
+        href="{{ section.settings.button_link }}"
+        class="inline-block border-2 border-white text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all text-center"
+      >
+        {{ section.settings.button_text }}
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom Gear",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "textarea",
+      "id": "overlay_text",
+      "label": "Overlay Text (Large Watermark)",
+      "default": "Create\nLegacy",
+      "info": "Large text shown on image (desktop only)"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Team Services"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Custom Gear\nProgram"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Start Your Order"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "pen", "label": "Pen Tool" },
+            { "value": "package", "label": "Package" },
+            { "value": "trophy", "label": "Trophy" },
+            { "value": "check", "label": "Check Mark" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Custom Gear",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "pen",
+            "title": "1. Design",
+            "description": "Work with our pro designers to forge your visual identity."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "package",
+            "title": "2. Order Portal",
+            "description": "We build a dedicated web store for your team. No paper forms."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "trophy",
+            "title": "3. Compete",
+            "description": "Gear delivered directly to athletes. Ready for the mat."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404"
+    },
+    "recommendations": {
+      "type": "product-carousel",
+      "settings": {
+        "heading": "Popular Products",
+        "limit": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recommendations"
+  ]
+}

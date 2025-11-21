@@ -3,21 +3,28 @@
     "hero": {
       "type": "hero-video",
       "settings": {
+        "show_badge": true,
         "badge_text": "New Season Gear Dropped",
         "heading": "Train Like\nA Pro",
-        "animation": "animate-fade-up"
+        "subheading": "Premium wrestling apparel and custom gear designed for the relentless.",
+        "media_opacity": 60
       }
     },
     "carousel": {
       "type": "product-carousel",
       "settings": {
-        "limit": 8
+        "heading": "The Gear",
+        "subheading": "Elite performance wear.",
+        "limit": 8,
+        "show_quick_add": true
       }
     },
     "teams": {
       "type": "team-grid",
       "settings": {
-        "heading": "Team Portals"
+        "eyebrow": "Exclusive Access",
+        "heading": "Team Portals",
+        "description": "Enter your team's dedicated store to access exclusive custom gear packs."
       }
     }
   },

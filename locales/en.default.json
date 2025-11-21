@@ -1,0 +1,63 @@
+{
+  "general": {
+    "title": "Rich Habits",
+    "pagination": {
+      "page": "Page {{ page }}"
+    },
+    "404": {
+      "title": "Page Not Found",
+      "subtext": "The page you were looking for does not exist."
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search products..."
+    },
+    "cart": {
+      "title": "Shopping Cart",
+      "empty": "Your cart is empty",
+      "subtotal": "Subtotal",
+      "checkout": "Checkout",
+      "continue_shopping": "Continue Shopping"
+    },
+    "forms": {
+      "post_success": "Thanks for contacting us. We'll get back to you as soon as possible.",
+      "post_error": "Please fill out all required fields."
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to Cart",
+      "sold_out": "Sold Out",
+      "unavailable": "Unavailable",
+      "quantity": "Quantity",
+      "price": "Price",
+      "vendor": "Vendor",
+      "from_price_html": "From {{ price }}"
+    }
+  },
+  "collections": {
+    "general": {
+      "no_matches": "No products found in this collection"
+    },
+    "sorting": {
+      "title": "Sort by",
+      "featured": "Featured",
+      "best_selling": "Best Selling",
+      "az": "Alphabetically, A-Z",
+      "za": "Alphabetically, Z-A",
+      "price_ascending": "Price, Low to High",
+      "price_descending": "Price, High to Low",
+      "date_descending": "Date, New to Old",
+      "date_ascending": "Date, Old to New"
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "message": "Message",
+      "send": "Send Message"
+    }
+  }
+}

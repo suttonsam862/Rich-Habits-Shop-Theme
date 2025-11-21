@@ -1,0 +1,88 @@
+{% comment %}
+  About Mission Section
+  Two-column layout with text and image
+{% endcomment %}
+
+<section class="py-24 bg-brand-black relative">
+  <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-16">
+    
+    <div class="w-full md:w-1/2">
+      {% if section.settings.heading != blank %}
+        <h2 class="font-display text-4xl md:text-6xl uppercase text-white mb-6 leading-[0.9]">
+          {{ section.settings.heading | newline_to_br }}
+        </h2>
+      {% endif %}
+      
+      <div class="h-1 w-24 bg-brand-red mb-8"></div>
+      
+      {% if section.settings.description != blank %}
+        <div class="space-y-6 text-neutral-400 text-lg font-light leading-relaxed rte">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+
+      {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+        <a 
+          href="{{ section.settings.button_link }}"
+          class="inline-block mt-8 bg-brand-red text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-red-700 transition"
+        >
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+    
+    <div class="w-full md:w-1/2 relative group">
+      <div class="absolute -inset-4 bg-brand-red/20 rounded-sm blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+      
+      {% if section.settings.image != blank %}
+        <img 
+          src="{{ section.settings.image | image_url: width: 1000 }}" 
+          alt="{{ section.settings.heading | escape }}"
+          loading="lazy"
+          class="relative z-10 w-full h-auto object-cover rounded-sm shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
+        />
+      {% else %}
+        <div class="relative z-10 w-full h-96 bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-sm"></div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Mission",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Built For\nThe Mat"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Mission"
+    }
+  ]
+}
+{% endschema %}

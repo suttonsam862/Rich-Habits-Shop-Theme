@@ -1,0 +1,73 @@
+{% comment %}
+  Renders a product card
+
+  Accepts:
+  - product: {Object} Product object
+  - show_vendor: {Boolean} Show vendor name (optional)
+  - show_quick_add: {Boolean} Show quick add button (optional)
+
+  Usage:
+  {% render 'product-card', product: product %}
+{% endcomment %}
+
+<div class="group relative min-w-[300px] md:min-w-[380px] snap-center">
+  <div class="relative h-[500px] bg-[#0a0a0a] border border-white/5 rounded-sm overflow-hidden transition-all duration-500 group-hover:border-white/20 group-hover:translate-y-[-10px]">
+    
+    <div class="absolute inset-0 bg-gradient-to-t from-brand-red/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    
+    <div class="h-[70%] flex items-center justify-center p-8 relative z-10">
+      <div class="absolute inset-0 bg-spotlight opacity-50"></div>
+      
+      {% if product.featured_image %}
+        <a href="{{ product.url }}" class="block w-full h-full">
+          <img 
+            src="{{ product.featured_image | image_url: width: 600 }}" 
+            alt="{{ product.featured_image.alt | escape }}"
+            loading="lazy"
+            width="600"
+            height="600"
+            class="w-full h-full object-cover mix-blend-overlay opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out drop-shadow-2xl"
+          />
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent z-20">
+      <div class="flex justify-between items-end">
+        <div>
+          {% if show_vendor and product.vendor != blank %}
+            <p class="text-brand-red text-xs font-bold uppercase tracking-widest mb-1">{{ product.vendor }}</p>
+          {% elsif product.type != blank %}
+            <p class="text-brand-red text-xs font-bold uppercase tracking-widest mb-1">{{ product.type }}</p>
+          {% endif %}
+          
+          <h3 class="font-display text-3xl text-white uppercase tracking-wide mb-1">
+            <a href="{{ product.url }}">{{ product.title }}</a>
+          </h3>
+          
+          <p class="text-neutral-400 font-sans">
+            {% if product.compare_at_price > product.price %}
+              <span class="line-through opacity-50">{{ product.compare_at_price | money }}</span>
+              <span class="text-brand-red ml-2">{{ product.price | money }}</span>
+            {% else %}
+              {{ product.price | money }}
+            {% endif %}
+          </p>
+        </div>
+        
+        {% if show_quick_add %}
+          <button 
+            type="button"
+            class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:bg-brand-red hover:text-white transition-colors"
+            data-product-id="{{ product.id }}"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="M12 5v14"></path>
+            </svg>
+          </button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

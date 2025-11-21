@@ -3,8 +3,9 @@
     "name": "theme_info",
     "theme_name": "Rich Habits Pro",
     "theme_author": "Rich Habits Dev",
-    "theme_version": "4.0.0",
-    "theme_documentation_url": "https://rich-habits.com/docs"
+    "theme_version": "5.0.0",
+    "theme_documentation_url": "https://rich-habits.com/docs",
+    "theme_support_url": "https://rich-habits.com/support"
   },
   {
     "name": "Colors",
@@ -59,34 +60,168 @@
     ]
   },
   {
-    "name": "Social Media",
+    "name": "Branding",
     "settings": [
       {
-        "type": "text",
-        "id": "social_instagram_link",
-        "label": "Instagram",
-        "info": "https://instagram.com/shopify"
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Will be scaled to 32x32px"
       },
       {
-        "type": "text",
-        "id": "social_facebook_link",
-        "label": "Facebook"
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo Image",
+        "info": "Displayed in header and footer"
       },
       {
-        "type": "text",
-        "id": "social_twitter_link",
-        "label": "Twitter"
+        "type": "range",
+        "id": "logo_width",
+        "min": 50,
+        "max": 200,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo Width",
+        "default": 100
       }
     ]
   },
   {
-    "name": "API Keys",
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter_link",
+        "label": "Twitter/X URL"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok_link",
+        "label": "TikTok URL"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart Type",
+        "options": [
+          { "value": "page", "label": "Page" },
+          { "value": "drawer", "label": "Drawer" }
+        ],
+        "default": "page"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_notes",
+        "label": "Enable Cart Notes",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Product Grid",
+    "settings": [
+      {
+        "type": "range",
+        "id": "products_per_row_desktop",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "label": "Products Per Row (Desktop)",
+        "default": 4
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Show Vendor",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_quick_add",
+        "label": "Enable Quick Add to Cart",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "AI Features",
     "settings": [
       {
         "type": "text",
         "id": "gemini_api_key",
         "label": "Google Gemini API Key",
-        "info": "Required for AI Coach and Gear Lab functionality."
+        "info": "Required for AI Coach and AI Gear Lab functionality. Get your key at https://ai.google.dev"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_ai_coach",
+        "label": "Enable AI Coach Widget",
+        "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "ai_coach_system_prompt",
+        "label": "AI Coach System Prompt",
+        "default": "You are the head wrestling coach for Rich Habits, a premium athletic brand. Your tone is intense, motivational, professional, and knowledgeable.",
+        "info": "Customize the AI coach personality"
+      }
+    ]
+  },
+  {
+    "name": "Newsletter",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_newsletter",
+        "label": "Show Newsletter Signup",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "newsletter_heading",
+        "label": "Newsletter Heading",
+        "default": "Join The Team"
+      },
+      {
+        "type": "textarea",
+        "id": "newsletter_text",
+        "label": "Newsletter Text",
+        "default": "Get exclusive access to new drops, team deals, and training tips."
+      }
+    ]
+  },
+  {
+    "name": "Checkout",
+    "settings": [
+      {
+        "type": "header",
+        "content": "These settings apply to your checkout"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_icons",
+        "label": "Show Payment Icons",
+        "default": true
       }
     ]
   }

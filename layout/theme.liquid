@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="{{ settings.bg_color }}">
+  
+  <title>{{ page_title }}{% if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.pagination.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {% if settings.favicon != blank %}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {% endif %}
+
+  {{ content_for_header }}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+  <style>
+    :root {
+      --brand-black: {{ settings.bg_color }};
+      --brand-charcoal: {{ settings.card_bg_color }};
+      --brand-red: {{ settings.accent_color }};
+      --text-white: {{ settings.text_color }};
+      --border-color: {{ settings.border_color }};
+    }
+  </style>
+</head>
+<body class="bg-brand-black text-white antialiased">
+  
+  {% sections 'header-group' %}
+
+  <main role="main" id="MainContent">
+    {{ content_for_layout }}
+  </main>
+
+  {% sections 'footer-group' %}
+
+  {% if settings.gemini_api_key != blank %}
+    {% render 'ai-coach-widget' %}
+  {% endif %}
+
+</body>
+</html>

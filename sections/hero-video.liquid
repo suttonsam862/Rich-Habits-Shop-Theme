@@ -1,0 +1,252 @@
+{% comment %}
+  Hero Section with Video/Image Background
+  Full-screen hero with editable content
+{% endcomment %}
+
+<section class="relative h-screen w-full overflow-hidden bg-brand-black flex items-center justify-center">
+  
+  <div class="absolute inset-0 z-0">
+    {% if section.settings.background_video != blank %}
+      <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        class="w-full h-full object-cover opacity-{{ section.settings.media_opacity }}"
+      >
+        <source src="{{ section.settings.background_video }}" type="video/mp4">
+      </video>
+    {% elsif section.settings.background_image != blank %}
+      <img 
+        src="{{ section.settings.background_image | image_url: width: 2560 }}" 
+        alt="{{ section.settings.heading | escape }}" 
+        class="w-full h-full object-cover opacity-{{ section.settings.media_opacity }} scale-105 animate-[pulse_10s_ease-in-out_infinite]"
+        loading="eager"
+      />
+    {% else %}
+      <div class="w-full h-full bg-gradient-to-br from-brand-charcoal to-brand-black"></div>
+    {% endif %}
+    
+    <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/50 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-transparent to-brand-black/90"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-transparent via-black/40 to-black"></div>
+  </div>
+
+  <div class="relative z-10 container mx-auto px-6 text-center flex flex-col items-center">
+    
+    {% if section.settings.show_badge and section.settings.badge_text != blank %}
+      <div class="mb-6 inline-flex items-center gap-2 px-4 py-2 border border-white/10 bg-white/5 backdrop-blur-sm rounded-full {{ section.settings.badge_animation }}">
+        <span class="w-2 h-2 bg-brand-red rounded-full animate-pulse"></span>
+        <span class="text-xs font-bold uppercase tracking-widest text-neutral-300">
+          {{ section.settings.badge_text }}
+        </span>
+      </div>
+    {% endif %}
+    
+    {% if section.settings.heading != blank %}
+      <h1 class="font-display text-7xl md:text-9xl uppercase text-white leading-[0.85] mb-8 tracking-tighter drop-shadow-2xl {{ section.settings.heading_animation }}">
+        {{ section.settings.heading | newline_to_br }}
+      </h1>
+    {% endif %}
+    
+    {% if section.settings.subheading != blank %}
+      <p class="max-w-xl text-neutral-400 text-lg md:text-xl mb-10 font-light {{ section.settings.text_animation }}">
+        {{ section.settings.subheading }}
+      </p>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="flex flex-col md:flex-row gap-4 w-full md:w-auto {{ section.settings.buttons_animation }}">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'button' %}
+              <a 
+                href="{{ block.settings.link }}"
+                class="{% if block.settings.style == 'solid' %}
+                  bg-brand-red text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-red-700 transition-all shadow-[0_0_20px_rgba(208,0,0,0.3)] hover:shadow-[0_0_30px_rgba(208,0,0,0.5)]
+                {% else %}
+                  border-2 border-white text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all
+                {% endif %} flex items-center justify-center gap-2"
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.label }}
+                {% if block.settings.show_icon %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg>
+                {% endif %}
+              </a>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-brand-black to-transparent z-20"></div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Video",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "url",
+      "id": "background_video",
+      "label": "Background Video URL",
+      "info": "Upload video to Shopify Files and paste URL. MP4 format recommended."
+    },
+    {
+      "type": "range",
+      "id": "media_opacity",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Media Opacity",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show Badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "New Season Gear Dropped"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Train Like\nA Pro",
+      "info": "Use line breaks to split text"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Premium wrestling apparel and custom gear designed for the relentless."
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "select",
+      "id": "badge_animation",
+      "label": "Badge Animation",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "animate-fade-up", "label": "Fade Up" },
+        { "value": "animate-fade-down", "label": "Fade Down" }
+      ],
+      "default": "animate-fade-up"
+    },
+    {
+      "type": "select",
+      "id": "heading_animation",
+      "label": "Heading Animation",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "animate-fade-up", "label": "Fade Up" },
+        { "value": "animate-slide-in", "label": "Slide In" }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "text_animation",
+      "label": "Text Animation",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "animate-fade-up", "label": "Fade Up" }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "buttons_animation",
+      "label": "Buttons Animation",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "animate-fade-up", "label": "Fade Up" }
+      ],
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Button Style",
+          "options": [
+            { "value": "solid", "label": "Solid" },
+            { "value": "outline", "label": "Outline" }
+          ],
+          "default": "solid"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show Arrow Icon",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Hero Video",
+      "blocks": [
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop Retail",
+            "style": "solid"
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Watch Highlights",
+            "style": "outline"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

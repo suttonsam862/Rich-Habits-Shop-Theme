@@ -1,0 +1,128 @@
+{% comment %}
+  Main Product Section
+  Product detail page
+{% endcomment %}
+
+<div class="container mx-auto px-6 py-16">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+    
+    <div>
+      {% if product.images.size > 0 %}
+        <div class="sticky top-24">
+          <div id="productGallery" class="mb-4">
+            <img 
+              id="mainImage"
+              src="{{ product.featured_image | image_url: width: 800 }}"
+              alt="{{ product.featured_image.alt | escape }}"
+              class="w-full aspect-square object-cover bg-brand-charcoal rounded-sm"
+            />
+          </div>
+
+          {% if product.images.size > 1 %}
+            <div class="grid grid-cols-4 gap-4">
+              {% for image in product.images limit: 4 %}
+                <button 
+                  onclick="document.getElementById('mainImage').src = '{{ image | image_url: width: 800 }}'"
+                  class="aspect-square overflow-hidden bg-brand-charcoal rounded-sm border border-white/5 hover:border-brand-red transition"
+                >
+                  <img 
+                    src="{{ image | image_url: width: 200 }}"
+                    alt="{{ image.alt | escape }}"
+                    class="w-full h-full object-cover"
+                  />
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div>
+      {% if product.vendor != blank %}
+        <p class="text-brand-red text-sm font-bold uppercase tracking-widest mb-2">
+          {{ product.vendor }}
+        </p>
+      {% endif %}
+
+      <h1 class="font-display text-4xl md:text-5xl uppercase text-white mb-4">
+        {{ product.title }}
+      </h1>
+
+      <div class="mb-6">
+        {% if product.compare_at_price > product.price %}
+          <span class="text-2xl text-neutral-500 line-through mr-3">{{ product.compare_at_price | money }}</span>
+          <span class="text-3xl text-brand-red font-bold">{{ product.price | money }}</span>
+          <span class="ml-3 bg-brand-red text-white px-3 py-1 text-xs font-bold uppercase">Sale</span>
+        {% else %}
+          <span class="text-3xl text-white font-bold">{{ product.price | money }}</span>
+        {% endif %}
+      </div>
+
+      {% if product.description != blank %}
+        <div class="prose prose-invert max-w-none mb-8 text-neutral-400">
+          {{ product.description }}
+        </div>
+      {% endif %}
+
+      <form action="/cart/add" method="post" enctype="multipart/form-data">
+        {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+            <div class="mb-6">
+              <label class="block text-white font-bold mb-2">{{ option.name }}</label>
+              <select 
+                name="options[{{ option.name | escape }}]"
+                class="w-full bg-brand-charcoal text-white border border-white/10 px-4 py-3 rounded-sm focus:outline-none focus:border-brand-red"
+              >
+                {% for value in option.values %}
+                  <option value="{{ value | escape }}">{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endfor %}
+        {% endunless %}
+
+        <div class="mb-6">
+          <label class="block text-white font-bold mb-2">Quantity</label>
+          <input 
+            type="number" 
+            name="quantity" 
+            value="1" 
+            min="1"
+            class="w-full bg-brand-charcoal text-white border border-white/10 px-4 py-3 rounded-sm focus:outline-none focus:border-brand-red"
+          />
+        </div>
+
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" />
+
+        <button 
+          type="submit"
+          class="w-full bg-brand-red text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-red-700 transition text-center {% unless product.available %}opacity-50 cursor-not-allowed{% endunless %}"
+          {% unless product.available %}disabled{% endunless %}
+        >
+          {% if product.available %}
+            Add to Cart
+          {% else %}
+            Sold Out
+          {% endif %}
+        </button>
+      </form>
+
+      {% if product.metafields.custom.features != blank %}
+        <div class="mt-12 border-t border-white/10 pt-8">
+          <h3 class="font-display text-xl uppercase text-white mb-4">Features</h3>
+          <div class="text-neutral-400">
+            {{ product.metafields.custom.features }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Information",
+  "settings": []
+}
+{% endschema %}

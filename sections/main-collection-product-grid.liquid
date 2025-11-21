@@ -1,0 +1,135 @@
+{% comment %}
+  Main Collection Product Grid
+  Displays products in a collection
+{% endcomment %}
+
+<div class="container mx-auto px-6 py-16">
+  
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+    <div>
+      <h1 class="font-display text-4xl md:text-5xl uppercase text-white mb-2">
+        {{ collection.title }}
+      </h1>
+      {% if collection.description != blank %}
+        <p class="text-neutral-400">{{ collection.description }}</p>
+      {% endif %}
+      <p class="text-neutral-500 text-sm mt-2">
+        {{ collection.products_count }} 
+        {% if collection.products_count == 1 %}product{% else %}products{% endif %}
+      </p>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <label for="SortBy" class="text-neutral-400 text-sm">Sort by:</label>
+      <select 
+        id="SortBy"
+        class="bg-brand-charcoal text-white border border-white/10 px-4 py-2 rounded-sm focus:outline-none focus:border-brand-red"
+        onchange="window.location.href = this.value"
+      >
+        <option value="?sort_by=manual">Featured</option>
+        <option value="?sort_by=best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best Selling</option>
+        <option value="?sort_by=title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>Alphabetically, A-Z</option>
+        <option value="?sort_by=title-descending" {% if collection.sort_by == 'title-descending' %}selected{% endif %}>Alphabetically, Z-A</option>
+        <option value="?sort_by=price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Price, Low to High</option>
+        <option value="?sort_by=price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Price, High to Low</option>
+        <option value="?sort_by=created-descending" {% if collection.sort_by == 'created-descending' %}selected{% endif %}>Date, New to Old</option>
+      </select>
+    </div>
+  </div>
+
+  {% paginate collection.products by 12 %}
+    {% if collection.products.size > 0 %}
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-12">
+        {% for product in collection.products %}
+          <div class="group">
+            <a href="{{ product.url }}" class="block relative aspect-square bg-brand-charcoal rounded-sm overflow-hidden mb-4">
+              {% if product.featured_image %}
+                <img 
+                  src="{{ product.featured_image | image_url: width: 500 }}"
+                  alt="{{ product.featured_image.alt | escape }}"
+                  loading="lazy"
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+              {% endif %}
+              
+              {% if product.compare_at_price > product.price %}
+                <div class="absolute top-4 right-4 bg-brand-red text-white px-3 py-1 text-xs font-bold uppercase">
+                  Sale
+                </div>
+              {% endif %}
+            </a>
+
+            <div>
+              {% if product.vendor != blank %}
+                <p class="text-brand-red text-xs font-bold uppercase tracking-widest mb-1">
+                  {{ product.vendor }}
+                </p>
+              {% endif %}
+              
+              <h3 class="font-bold text-white mb-2">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </h3>
+              
+              <p class="text-neutral-400">
+                {% if product.compare_at_price > product.price %}
+                  <span class="line-through opacity-50 mr-2">{{ product.compare_at_price | money }}</span>
+                  <span class="text-brand-red font-bold">{{ product.price | money }}</span>
+                {% else %}
+                  {{ product.price | money }}
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <div class="flex justify-center gap-2">
+          {% if paginate.previous %}
+            <a 
+              href="{{ paginate.previous.url }}"
+              class="px-4 py-2 border border-white/10 text-white hover:bg-white hover:text-black transition"
+            >
+              Previous
+            </a>
+          {% endif %}
+
+          {% for part in paginate.parts %}
+            {% if part.is_link %}
+              <a 
+                href="{{ part.url }}"
+                class="px-4 py-2 border border-white/10 text-white hover:bg-white hover:text-black transition"
+              >
+                {{ part.title }}
+              </a>
+            {% else %}
+              <span class="px-4 py-2 bg-brand-red text-white font-bold">
+                {{ part.title }}
+              </span>
+            {% endif %}
+          {% endfor %}
+
+          {% if paginate.next %}
+            <a 
+              href="{{ paginate.next.url }}"
+              class="px-4 py-2 border border-white/10 text-white hover:bg-white hover:text-black transition"
+            >
+              Next
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="text-center py-24">
+        <p class="text-neutral-500 text-lg">No products in this collection.</p>
+      </div>
+    {% endif %}
+  {% endpaginate %}
+</div>
+
+{% schema %}
+{
+  "name": "Collection Product Grid",
+  "settings": []
+}
+{% endschema %}

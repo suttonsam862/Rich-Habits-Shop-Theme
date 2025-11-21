@@ -1,0 +1,143 @@
+{% comment %}
+  Main Cart Section
+{% endcomment %}
+
+<div class="container mx-auto px-6 py-16 min-h-screen">
+  <h1 class="font-display text-5xl uppercase text-white mb-12">Shopping Cart</h1>
+
+  {% if cart.item_count > 0 %}
+    <form action="/cart" method="post">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        
+        <div class="lg:col-span-2">
+          {% for item in cart.items %}
+            <div class="flex gap-6 py-6 border-b border-white/10">
+              <a href="{{ item.url }}" class="shrink-0">
+                {% if item.image %}
+                  <img 
+                    src="{{ item.image | image_url: width: 150 }}"
+                    alt="{{ item.title | escape }}"
+                    class="w-24 h-24 object-cover bg-brand-charcoal rounded-sm"
+                  />
+                {% endif %}
+              </a>
+
+              <div class="flex-1">
+                <a href="{{ item.url }}" class="font-bold text-white text-lg hover:text-brand-red transition">
+                  {{ item.product.title }}
+                </a>
+                
+                {% unless item.variant.title contains 'Default' %}
+                  <p class="text-neutral-500 text-sm mt-1">{{ item.variant.title }}</p>
+                {% endunless %}
+
+                {% if item.properties.size > 0 %}
+                  <div class="mt-2 text-sm text-neutral-500">
+                    {% for property in item.properties %}
+                      {% unless property.first contains '_' %}
+                        <p>{{ property.first }}: {{ property.last }}</p>
+                      {% endunless %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <div class="flex items-center gap-4 mt-4">
+                  <input 
+                    type="number"
+                    name="updates[]"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    class="w-20 bg-brand-charcoal text-white border border-white/10 px-3 py-2 rounded-sm text-center"
+                    data-line="{{ forloop.index }}"
+                  />
+                  
+                  <span class="text-white font-bold">
+                    {{ item.final_line_price | money }}
+                  </span>
+
+                  <a 
+                    href="/cart/change?line={{ forloop.index }}&quantity=0"
+                    class="text-neutral-500 hover:text-brand-red text-sm uppercase tracking-wide"
+                  >
+                    Remove
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+          <button 
+            type="submit"
+            name="update"
+            class="mt-6 px-6 py-3 border border-white/20 text-white uppercase font-bold text-sm tracking-widest hover:bg-white hover:text-black transition"
+          >
+            Update Cart
+          </button>
+        </div>
+
+        <div>
+          <div class="bg-brand-charcoal p-8 rounded-sm sticky top-24">
+            <h2 class="font-display text-2xl uppercase text-white mb-6">Order Summary</h2>
+            
+            <div class="space-y-4 mb-6 pb-6 border-b border-white/10">
+              <div class="flex justify-between text-neutral-400">
+                <span>Subtotal</span>
+                <span>{{ cart.total_price | money }}</span>
+              </div>
+              <div class="flex justify-between text-neutral-400">
+                <span>Shipping</span>
+                <span>Calculated at checkout</span>
+              </div>
+            </div>
+
+            <div class="flex justify-between text-white font-bold text-xl mb-8">
+              <span>Total</span>
+              <span>{{ cart.total_price | money }}</span>
+            </div>
+
+            <button 
+              type="submit"
+              name="checkout"
+              class="w-full bg-brand-red text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-red-700 transition text-center mb-4"
+            >
+              Checkout
+            </button>
+
+            <a 
+              href="/collections/all"
+              class="block w-full text-center px-8 py-4 border border-white/20 text-white uppercase font-bold text-sm tracking-widest hover:bg-white hover:text-black transition"
+            >
+              Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <div class="text-center py-24">
+      <h2 class="font-display text-3xl text-white mb-4">Your cart is empty</h2>
+      <p class="text-neutral-400 mb-8">Add some items to get started</p>
+      <a 
+        href="/collections/all"
+        class="inline-block bg-brand-red text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest hover:bg-red-700 transition"
+      >
+        Shop Now
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+document.querySelectorAll('input[data-line]').forEach(input => {
+  input.addEventListener('change', function() {
+    this.closest('form').submit();
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": []
+}
+{% endschema %}

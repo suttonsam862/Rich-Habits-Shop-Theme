@@ -1,0 +1,175 @@
+{% comment %}
+  Team Grid Section
+  Displays team portals with customizable blocks
+{% endcomment %}
+
+<section class="py-24 bg-brand-black">
+  <div class="container mx-auto px-6">
+    
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-white/10 pb-8">
+      <div>
+        {% if section.settings.eyebrow != blank %}
+          <span class="text-brand-red font-bold tracking-widest text-sm uppercase mb-2 block">
+            {{ section.settings.eyebrow }}
+          </span>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h2 class="font-display text-5xl md:text-6xl uppercase text-white">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+      </div>
+      
+      {% if section.settings.description != blank %}
+        <div class="mt-6 md:mt-0">
+          <p class="text-neutral-400 max-w-xs text-right">
+            {{ section.settings.description }}
+          </p>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if section.blocks.size > 0 %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'team' %}
+              <a 
+                href="{{ block.settings.link }}"
+                class="group relative h-64 overflow-hidden cursor-pointer border border-white/5 hover:border-brand-red/50 transition-colors"
+                {{ block.shopify_attributes }}
+              >
+                <div class="absolute inset-0">
+                  {% if block.settings.image != blank %}
+                    <img 
+                      src="{{ block.settings.image | image_url: width: 800 }}" 
+                      alt="{{ block.settings.name | escape }}" 
+                      loading="lazy"
+                      class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+                    />
+                  {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-neutral-800 to-neutral-900"></div>
+                  {% endif %}
+                  <div class="absolute inset-0 bg-black/70 group-hover:bg-black/40 transition-colors duration-500"></div>
+                </div>
+
+                <div class="absolute inset-0 p-8 flex flex-col justify-between">
+                  <div class="flex justify-between items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white/50 group-hover:text-brand-red transition-colors">
+                      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                    </svg>
+                    <div class="bg-white/10 p-2 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-4 group-hover:translate-y-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                        <path d="M7 7h10v10"></path>
+                        <path d="M7 17 17 7"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 class="font-display text-3xl text-white uppercase tracking-wide translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                      {{ block.settings.name }}
+                    </h3>
+                    {% if block.settings.location != blank %}
+                      <p class="text-neutral-400 text-sm uppercase tracking-widest mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                        {{ block.settings.location }}
+                      </p>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-12 text-neutral-500">
+        <p>Add team blocks to display teams</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Team Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Exclusive Access"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Team Portals"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Enter your team's dedicated store to access exclusive custom gear packs."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "team",
+      "name": "Team",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Team Name",
+          "default": "Team Name"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "City, State"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Team Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Team Store URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Team Grid",
+      "blocks": [
+        {
+          "type": "team",
+          "settings": {
+            "name": "Ranger 47",
+            "location": "Austin, TX"
+          }
+        },
+        {
+          "type": "team",
+          "settings": {
+            "name": "Brooks WC",
+            "location": "Chicago, IL"
+          }
+        },
+        {
+          "type": "team",
+          "settings": {
+            "name": "Ironclad",
+            "location": "Pittsburgh, PA"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

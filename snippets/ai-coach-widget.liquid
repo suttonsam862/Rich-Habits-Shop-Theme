@@ -1,0 +1,164 @@
+{% comment %}
+  AI Coach Widget
+  Powered by Google Gemini API
+  Only renders if API key is configured
+{% endcomment %}
+
+{% if settings.gemini_api_key != blank and settings.enable_ai_coach %}
+<div id="ai-coach-widget" class="fixed bottom-6 right-6 z-50" x-data="aiCoach()">
+  <button 
+    @click="isOpen = !isOpen"
+    class="bg-brand-red text-white px-6 py-3 rounded-full shadow-2xl hover:bg-red-700 transition-all flex items-center gap-2 font-bold uppercase tracking-wider text-sm"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+      <path d="M20 3v4"></path>
+      <path d="M22 5h-4"></path>
+    </svg>
+    Ask Coach
+  </button>
+
+  <div 
+    x-show="isOpen" 
+    x-cloak
+    @click.away="isOpen = false"
+    class="absolute bottom-16 right-0 w-96 bg-brand-charcoal border border-white/10 rounded-lg shadow-2xl overflow-hidden"
+  >
+    <div class="bg-brand-red px-6 py-4 flex items-center justify-between">
+      <h3 class="font-display text-xl uppercase text-white">Rich Habits Coach</h3>
+      <button @click="isOpen = false" class="text-white hover:text-black transition">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-6 max-h-96 overflow-y-auto space-y-4" x-ref="messages">
+      <template x-for="(message, index) in messages" :key="index">
+        <div :class="message.role === 'user' ? 'text-right' : 'text-left'">
+          <div 
+            :class="message.role === 'user' ? 'bg-brand-red text-white ml-auto' : 'bg-white/5 text-white mr-auto'"
+            class="inline-block px-4 py-2 rounded-lg max-w-[80%] text-sm"
+            x-text="message.content"
+          ></div>
+        </div>
+      </template>
+
+      <div x-show="isLoading" class="text-left">
+        <div class="inline-block bg-white/5 text-white px-4 py-2 rounded-lg">
+          <div class="flex gap-1">
+            <div class="w-2 h-2 bg-brand-red rounded-full animate-bounce"></div>
+            <div class="w-2 h-2 bg-brand-red rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+            <div class="w-2 h-2 bg-brand-red rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+          </div>
+        </div>
+      </div>
+
+      <div x-show="!apiKey && messages.length === 0" class="text-center text-neutral-500 text-sm">
+        <p>API key not configured. Please contact support.</p>
+      </div>
+    </div>
+
+    <form @submit.prevent="sendMessage" class="border-t border-white/10 p-4">
+      <div class="flex gap-2">
+        <input 
+          type="text" 
+          x-model="currentMessage"
+          placeholder="Ask about training, technique..."
+          :disabled="!apiKey"
+          class="flex-1 bg-white/5 text-white px-4 py-2 rounded-lg border border-white/10 focus:outline-none focus:border-brand-red transition placeholder-neutral-500 disabled:opacity-50"
+        />
+        <button 
+          type="submit"
+          :disabled="!currentMessage.trim() || isLoading || !apiKey"
+          class="bg-brand-red text-white px-6 py-2 rounded-lg font-bold hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Send
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<style>
+  [x-cloak] { display: none !important; }
+</style>
+
+<script>
+document.addEventListener('alpine:init', () => {
+  Alpine.data('aiCoach', () => ({
+    isOpen: false,
+    messages: [],
+    currentMessage: '',
+    isLoading: false,
+    apiKey: '{{ settings.gemini_api_key }}',
+
+    init() {
+      if (!this.apiKey) {
+        console.warn('AI Coach: No API key configured');
+        this.messages.push({
+          role: 'assistant',
+          content: 'API key not configured. Please contact the store owner.'
+        });
+      }
+    },
+
+    async sendMessage() {
+      if (!this.currentMessage.trim() || !this.apiKey) return;
+
+      const userMessage = this.currentMessage.trim();
+      this.messages.push({ role: 'user', content: userMessage });
+      this.currentMessage = '';
+      this.isLoading = true;
+
+      setTimeout(() => {
+        if (this.$refs.messages) {
+          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+        }
+      }, 10);
+
+      try {
+        const response = await fetch('/apps/ai-coach', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 
+            message: userMessage,
+            apiKey: this.apiKey
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('API request failed');
+        }
+
+        const data = await response.json();
+        
+        this.messages.push({ 
+          role: 'assistant', 
+          content: data.response || 'Coach is busy on the mats right now. Try again later.' 
+        });
+
+      } catch (error) {
+        console.error('AI Coach error:', error);
+        this.messages.push({ 
+          role: 'assistant', 
+          content: 'Coach is busy on the mats right now. Try again later.' 
+        });
+      } finally {
+        this.isLoading = false;
+        setTimeout(() => {
+          if (this.$refs.messages) {
+            this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+          }
+        }, 10);
+      }
+    }
+  }));
+});
+</script>
+{% endif %}
